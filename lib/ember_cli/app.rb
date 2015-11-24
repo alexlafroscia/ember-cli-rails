@@ -96,6 +96,8 @@ module EmberCli
       if production?
         FileUtils.cp(paths.app_assets.join("index.html"), index_file)
       end
+
+      sprockets.update!
     end
 
     def symlink_to_assets_root

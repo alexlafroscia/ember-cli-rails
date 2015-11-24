@@ -24,8 +24,23 @@ module EmberCli
       html_page.render
     end
 
-    def assets
-      ["#{app.name}/assets/vendor", "#{app.name}/assets/#{ember_app_name}"]
+    def javascript_assets
+      [
+        rails_assets.grep(%r{#{app.name}/assets/vendor(.*)\.js}).first,
+        rails_assets.grep(%r{#{app.name}/assets/#{ember_app_name}(.*)\.js}).first,
+      ]
+    end
+
+    def stylesheet_assets
+      [
+        rails_assets.grep(%r{#{app.name}/assets/vendor(.*)\.css}).first,
+        rails_assets.grep(%r{#{app.name}/assets/#{ember_app_name}(.*)\.css}).first,
+      ]
+    end
+
+    def update!
+      rails_manifest.assets.merge!(ember_manifest.assets)
+      rails_manifest.files.merge!(ember_manifest.files)
     end
 
     private
@@ -39,6 +54,18 @@ module EmberCli
     def package_json
       @package_json ||=
         JSON.parse(app.paths.package_json_file.read).with_indifferent_access
+    end
+
+    def ember_manifest
+      @ember_manifest ||= ::Sprockets::Manifest.new(Rails.env, app.paths.manifest)
+    end
+
+    def rails_manifest
+      Rails.application.assets_manifest
+    end
+
+    def rails_assets
+      rails_manifest.assets.keys
     end
 
     def asset_matcher

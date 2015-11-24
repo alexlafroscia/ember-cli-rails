@@ -20,10 +20,10 @@ module EmberRailsHelper
   end
 
   def include_ember_script_tags(name, **options)
-    javascript_include_tag(*EmberCli[name].sprockets.assets, options)
+    javascript_include_tag(*EmberCli[name].sprockets.javascript_assets, options)
   end
 
   def include_ember_stylesheet_tags(name, **options)
-    stylesheet_link_tag(*EmberCli[name].sprockets.assets, options)
+    stylesheet_link_tag(*EmberCli[name].sprockets.stylesheet_assets, options)
   end
 end

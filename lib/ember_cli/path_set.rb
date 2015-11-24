@@ -76,11 +76,7 @@ module EmberCli
     end
 
     def manifest
-      @manifest ||= begin
-        manifest_glob = app_assets.join("assets", "manifest*.json")
-
-        Pathname(Dir[manifest_glob].first)
-      end
+      manifests.first
     end
 
     def bower
@@ -116,6 +112,10 @@ module EmberCli
     attr_reader :app, :configuration, :ember_cli_root, :environment, :rails_root
 
     delegate :name, :options, to: :app, prefix: true
+
+    def manifests
+      Pathname.glob(app_assets.join("assets", "manifest*.json"))
+    end
 
     def default_root
       rails_root.join(app_name)
