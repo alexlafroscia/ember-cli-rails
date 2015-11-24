@@ -61,6 +61,21 @@ describe EmberCli::PathSet do
     end
   end
 
+  describe "#manifest" do
+    it "is a hashed child of #app_assets" do
+      manifest_path = ember_cli_root.join(
+        "assets",
+        "bar",
+        "assets",
+        "manifest-abc123.json",
+      )
+      create_file(manifest_path)
+      path_set = build_path_set(app: double(name: "bar"))
+
+      expect(path_set.manifest).to eq(manifest_path)
+    end
+  end
+
   describe "#app_assets" do
     it "is a child of #assets" do
       app = double(name: "bar")
@@ -194,6 +209,12 @@ describe EmberCli::PathSet do
     FileUtils.touch(path)
     file = File.new(path)
     file.chmod(0777)
+    path
+  end
+
+  def create_file(path)
+    path.parent.mkpath
+    FileUtils.touch(path)
     path
   end
 

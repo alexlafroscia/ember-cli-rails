@@ -75,6 +75,14 @@ module EmberCli
       @build_error_file ||= tmp.join("error.txt")
     end
 
+    def manifest
+      @manifest ||= begin
+        manifest_glob = app_assets.join("assets", "manifest*.json")
+
+        Pathname(Dir[manifest_glob].first)
+      end
+    end
+
     def bower
       @bower ||= begin
         bower_path = app_options.fetch(:bower_path) { configuration.bower_path }
