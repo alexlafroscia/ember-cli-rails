@@ -34,6 +34,7 @@ module EmberCli
         @shell.compile
         @build.check!
         copy_index_html_file
+        sprockets.update_manifest!
         true
       end
     end
@@ -82,6 +83,7 @@ module EmberCli
       prepare
       @shell.build_and_watch
       copy_index_html_file
+      sprockets.update_manifest!
     end
 
     def prepare
@@ -96,8 +98,6 @@ module EmberCli
       if production?
         FileUtils.cp(paths.app_assets.join("index.html"), index_file)
       end
-
-      sprockets.update!
     end
 
     def symlink_to_assets_root

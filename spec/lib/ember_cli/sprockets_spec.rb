@@ -1,7 +1,7 @@
 require "ember_cli/sprockets"
 
 describe EmberCli::Sprockets do
-  describe "#update!" do
+  describe "#update_manifest!" do
     it "merges the EmberCLI-generated manifest with Sprockets' manifest" do
       rails_manifest = create_manifest("assets" => {}, "files" => {})
       ember_manifest = create_manifest(
@@ -16,7 +16,7 @@ describe EmberCli::Sprockets do
       app = double(paths: path_set)
       sprockets = EmberCli::Sprockets.new(app)
 
-      sprockets.update!
+      sprockets.update_manifest!
 
       expect(rails_manifest).to eq(
         "assets" => {
@@ -27,5 +27,13 @@ describe EmberCli::Sprockets do
         }
       )
     end
+  end
+
+  def create_manifest(json)
+    tempfile = Tempfile.new("json")
+    tempfile.write(JSON.dump(json))
+    tempfile.close
+
+    tempfile.path
   end
 end
